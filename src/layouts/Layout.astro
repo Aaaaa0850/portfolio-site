@@ -29,19 +29,19 @@ const links = [
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap"
             rel="stylesheet"
         />
-        <title>{title} | YOUR NAME</title>
+        <title>{title}</title>
     </head>
     <body>
-        <header class="bg-white shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
-            <div class="mx-auto flex min-h-19 w-[calc(100%-48px)] max-w-240 items-center justify-between gap-6 max-[700px]:flex-col max-[700px]:items-start max-[700px]:gap-4.5 max-[700px]:py-5">
+        <header class="sticky top-0 z-40 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
+            <div class="mx-auto flex min-h-19 w-[calc(100%-48px)] max-w-240 items-center justify-between gap-6">
                 <a
-                    class="whitespace-nowrap text-[17px] font-bold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#444]"
+                    class="whitespace-nowrap text-[20px] font-bold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#444]"
                     href="/"
                 >
-                    YOUR NAME
+                    sumi.
                 </a>
                 <nav
-                    class="flex flex-wrap gap-6 max-[700px]:gap-x-5 max-[700px]:gap-y-3"
+                    class="flex flex-wrap gap-6 max-[700px]:hidden"
                     aria-label="メインナビゲーション"
                 >
                     {links.map(([label, href]) => (
@@ -56,8 +56,70 @@ const links = [
                         </a>
                     ))}
                 </nav>
+                <button
+                    id="menu-open"
+                    class="hidden p-2 text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4 max-[700px]:block"
+                    type="button"
+                    aria-label="メニューを開く"
+                    aria-haspopup="dialog"
+                    aria-controls="mobile-menu"
+                >
+                    <svg
+                        aria-hidden="true"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                </button>
             </div>
         </header>
+        <dialog
+            id="mobile-menu"
+            aria-labelledby="mobile-menu-title"
+            class="mobile-menu fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-[min(320px,85vw)] max-w-none bg-white p-0 text-[#222] shadow-[-8px_0_24px_rgba(0,0,0,0.12)] backdrop:bg-black/40"
+        >
+            <div class="flex items-center justify-between px-6 py-6">
+                <h2 id="mobile-menu-title" class="text-base font-bold">
+                    Menu
+                </h2>
+                <button
+                    id="menu-close"
+                    type="button"
+                    aria-label="メニューを閉じる"
+                    class="p-2 focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                    <svg
+                        aria-hidden="true"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M6 6l12 12M18 6 6 18" />
+                    </svg>
+                </button>
+            </div>
+            <nav aria-label="モバイルナビゲーション" class="flex flex-col px-6">
+                {links.map(([label, href]) => (
+                    <a
+                        href={href}
+                        aria-current={
+                            Astro.url.pathname === href ? "page" : undefined
+                        }
+                        class="border-t border-neutral-200 py-4 text-sm text-neutral-700 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-[-2px] aria-[current=page]:font-bold"
+                    >
+                        {label}
+                    </a>
+                ))}
+            </nav>
+        </dialog>
         <main>
             <slot />
         </main>
@@ -66,3 +128,38 @@ const links = [
         </footer>
     </body>
 </html>
+<style>
+    .mobile-menu[open] {
+        animation: slide-in 200ms ease-out;
+    }
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .mobile-menu[open] {
+            animation: none;
+        }
+    }
+</style>
+<script>
+    const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
+    const open = document.querySelector<HTMLButtonElement>("#menu-open");
+    const close = document.querySelector<HTMLButtonElement>("#menu-close");
+    open?.addEventListener("click", () => {
+        if (menu && !menu.open) menu.showModal();
+    });
+    close?.addEventListener("click", () => menu?.close());
+    menu?.addEventListener("click", (event) => {
+        if (event.target === menu) menu.close();
+    });
+    window
+        .matchMedia("(min-width: 701px)")
+        .addEventListener("change", (event) => {
+            if (event.matches && menu?.open) menu.close();
+        });
+</script>

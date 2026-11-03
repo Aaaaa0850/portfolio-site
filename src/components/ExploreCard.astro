@@ -1,0 +1,21 @@
+---
+interface Props {
+  title: string;
+  href: string;
+  description?: string;
+}
+
+const { title, href, description } = Astro.props;
+---
+
+<a
+  class="flex justify-between gap-5 bg-white p-5.5 text-base font-semibold shadow-[0_3px_14px_rgba(0,0,0,0.06)] hover:bg-[#eee] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#444]"
+  href={href}
+>
+  <div>
+    {Astro.slots.has('icon') && <span class="mb-3 block" aria-hidden="true"><slot name="icon" /></span>}
+    <span>{title}</span>
+    {description && <p class="mt-2 text-sm leading-relaxed font-normal text-neutral-600">{description}</p>}
+  </div>
+  <span class="font-normal text-[#777]" aria-hidden="true">→</span>
+</a>

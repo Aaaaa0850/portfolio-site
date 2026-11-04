@@ -1,0 +1,202 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SkillsExplorer, { type Skill } from "../components/SkillsExplorer";
+
+const skills: Skill[] = [
+    // Frontend
+    {
+        name: "TypeScript",
+        category: "Frontend",
+        description:
+            "Webアプリケーションのフロントエンド・バックエンド双方で使用。型安全性を意識した開発に活用しています。",
+    },
+    {
+        name: "JavaScript",
+        category: "Frontend",
+        description:
+            "Webアプリケーションの開発で使用。動的なUIや各種処理の実装に活用しています。",
+    },
+    {
+        name: "HTML / CSS",
+        category: "Frontend",
+        description:
+            "Webページの構造設計やスタイリングに使用。レスポンシブ対応や視認性を意識したUIを制作しています。",
+    },
+    {
+        name: "React",
+        category: "Frontend",
+        description:
+            "コンポーネントベースのUI開発に使用。状態管理やインタラクティブな画面の実装に活用しています。",
+    },
+    {
+        name: "Vue.js",
+        category: "Frontend",
+        description:
+            "Vueベースのフレームワークを使用したWebアプリケーション開発を経験。リアクティブなUIの構築に活用しています。",
+    },
+    {
+        name: "Svelte",
+        category: "Frontend",
+        description:
+            "SvelteベースのWebアプリケーション開発で使用。コンポーネントの作成やリアクティブなUIの実装を経験しています。",
+    },
+    {
+        name: "Next.js",
+        category: "Frontend",
+        description:
+            "ReactをベースとしたWebアプリケーション開発に使用。画面構築やルーティングなどを実装しています。",
+    },
+    {
+        name: "Nuxt",
+        category: "Frontend",
+        description:
+            "VueベースのWebアプリケーション開発で使用。ページ構成やコンポーネントの実装を経験しています。",
+    },
+    {
+        name: "SvelteKit",
+        category: "Frontend",
+        description:
+            "Webアプリケーションの開発に使用。画面構築やバックエンドAPIとの連携を経験しています。",
+    },
+    {
+        name: "Astro",
+        category: "Frontend",
+        description:
+            "Webサイトの構築に使用。静的コンテンツとReactによる動的UIを組み合わせた開発に活用しています。",
+    },
+    {
+        name: "React Native",
+        category: "Frontend",
+        description:
+            "Reactを活用したモバイルアプリ開発で使用。スマートフォン向けのUI構築に取り組んでいます。",
+    },
+    {
+        name: "Expo",
+        category: "Frontend",
+        description:
+            "React Nativeによるモバイルアプリ開発環境として使用。画面構築やAPIとの連携に活用しています。",
+    },
+
+    // Backend
+    {
+        name: "Hono",
+        category: "Backend",
+        description:
+            "REST APIの構築やCloudflare Workers上でのバックエンド開発に使用。複数のアプリケーションで活用しています。",
+    },
+    {
+        name: "Node.js",
+        category: "Backend",
+        description:
+            "JavaScript・TypeScriptによる開発環境やサーバーサイド処理に使用。Web開発の基盤として活用しています。",
+    },
+    {
+        name: "Drizzle ORM",
+        category: "Backend",
+        description:
+            "データベース操作に使用。TypeScriptによる型安全なクエリの記述やデータ管理に活用しています。",
+    },
+    {
+        name: "Zod",
+        category: "Backend",
+        description:
+            "APIのリクエストやデータ構造の検証に使用。スキーマ定義による安全なデータ処理に活用しています。",
+    },
+    {
+        name: "Clerk",
+        category: "Backend",
+        description:
+            "Webアプリケーションの認証基盤として使用。ユーザー認証機能の実装や認証サービスとの連携に活用しています。",
+    },
+    {
+        name: "Better Auth",
+        category: "Backend",
+        description:
+            "Webアプリケーションの認証機能に使用。ログイン処理や認証基盤の構築を経験しています。",
+    },
+    {
+        name: "SQLite",
+        category: "Backend",
+        description:
+            "アプリケーションのデータ保存・取得に使用。Cloudflare D1やTursoを通じたデータベース操作を経験しています。",
+    },
+
+    // Cloud
+    {
+        name: "Cloudflare Workers",
+        category: "Cloud",
+        description:
+            "Honoを使用したサーバーレスAPIの実行基盤として活用。エッジ環境で動作するバックエンドを開発しています。",
+    },
+    {
+        name: "Cloudflare D1",
+        category: "Cloud",
+        description:
+            "サーバーレス環境のデータベースとして使用。Workersと連携したデータの保存・取得を経験しています。",
+    },
+    {
+        name: "Cloudflare Workers AI",
+        category: "Cloud",
+        description:
+            "AIモデルを利用した画像判定処理の実装・検証に使用。APIを通じたAI機能の組み込みに取り組んでいます。",
+    },
+    {
+        name: "Turso",
+        category: "Cloud",
+        description:
+            "SQLite互換のデータベースとして使用。Drizzle ORMと組み合わせたデータ操作を経験しています。",
+    },
+
+    // Other
+    {
+        name: "Git",
+        category: "Other",
+        description:
+            "個人開発やチーム開発でバージョン管理に使用。変更履歴やブランチの管理に活用しています。",
+    },
+    {
+        name: "Linux",
+        category: "Other",
+        description:
+            "Ubuntuを使用したLinux実習やセキュリティ実験を経験。コマンドラインによる基本的な操作ができます。",
+    },
+    {
+        name: "pnpm",
+        category: "Other",
+        description:
+            "JavaScript・TypeScriptプロジェクトのパッケージ管理に使用。モノレポ構成の開発にも活用しています。",
+    },
+    {
+        name: "Turborepo",
+        category: "Other",
+        description:
+            "モノレポ管理に使用。フロントエンドとバックエンドを同一リポジトリで管理する構成に活用しています。",
+    },
+    {
+        name: "Unity",
+        category: "Other",
+        description:
+            "ゲーム開発で使用。WebGL向けのビルドや、制作したコンテンツのWeb公開を経験しています。",
+    },
+    {
+        name: "Mermaid",
+        category: "Other",
+        description:
+            "システム構成図やシーケンス図などの作成に使用。設計内容の可視化やドキュメント作成に活用しています。",
+    },
+];
+---
+
+<Layout title="Skills">
+    <div class="mx-auto min-h-[calc(100vh-149px)] w-[calc(100%-48px)] max-w-240 pt-20 pb-25 max-[600px]:pt-14 max-[600px]:pb-17.5">
+        <header class="mb-12 max-[600px]:mb-8">
+            <h1 class="text-[clamp(32px,5vw,46px)] leading-[1.3] font-bold">
+                Skills
+            </h1>
+            <p class="mt-4 text-sm text-neutral-500">
+                掲載内容はテンプレート用のサンプルです。
+            </p>
+        </header>
+        <SkillsExplorer skills={skills} client:load />
+    </div>
+</Layout>

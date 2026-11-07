@@ -1,13 +1,13 @@
 ---
-import "../styles/global.css";
-const { title = "Portfolio" } = Astro.props;
+import '../styles/global.css';
+const { title = 'Portfolio' } = Astro.props;
 const links = [
-    ["About", "/about"],
-    ["Skills", "/skills"],
-    ["Qualifications", "/qualifications"],
-    ["Uses", "/uses"],
-    ["Works", "/works"],
-    ["Contact", "/contact"],
+    ['About', '/about'],
+    ['Skills', '/skills'],
+    ['Qualifications', '/qualifications'],
+    ['Uses', '/uses'],
+    ['Works', '/works'],
+    ['Contact', '/contact'],
 ];
 ---
 
@@ -49,7 +49,7 @@ const links = [
                             class="text-sm text-[#666] hover:text-[#111] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#444] aria-[current=page]:text-[#111]"
                             href={href}
                             aria-current={
-                                Astro.url.pathname === href ? "page" : undefined
+                                Astro.url.pathname === href ? 'page' : undefined
                             }
                         >
                             {label}
@@ -111,7 +111,7 @@ const links = [
                     <a
                         href={href}
                         aria-current={
-                            Astro.url.pathname === href ? "page" : undefined
+                            Astro.url.pathname === href ? 'page' : undefined
                         }
                         class="border-t border-neutral-200 py-4 text-sm text-neutral-700 hover:text-black focus-visible:outline-2 focus-visible:-outline-offset-2 aria-[current=page]:font-bold"
                     >
@@ -147,19 +147,19 @@ const links = [
     }
 </style>
 <script>
-    const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
-    const open = document.querySelector<HTMLButtonElement>("#menu-open");
-    const close = document.querySelector<HTMLButtonElement>("#menu-close");
-    open?.addEventListener("click", () => {
+    const menu = document.querySelector<HTMLDialogElement>('#mobile-menu');
+    const open = document.querySelector<HTMLButtonElement>('#menu-open');
+    const close = document.querySelector<HTMLButtonElement>('#menu-close');
+    open?.addEventListener('click', () => {
         if (menu && !menu.open) menu.showModal();
     });
-    close?.addEventListener("click", () => menu?.close());
-    menu?.addEventListener("click", (event) => {
+    close?.addEventListener('click', () => menu?.close());
+    menu?.addEventListener('click', (event) => {
         if (event.target === menu) menu.close();
     });
     window
-        .matchMedia("(min-width: 701px)")
-        .addEventListener("change", (event) => {
+        .matchMedia('(min-width: 701px)')
+        .addEventListener('change', (event) => {
             if (event.matches && menu?.open) menu.close();
         });
 </script>

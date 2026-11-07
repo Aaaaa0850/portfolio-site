@@ -1,24 +1,24 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro';
 
 const nationalQualifications = [
     {
-        name: "情報処理安全確保支援士試験",
-        date: "2025年12月",
+        name: '情報処理安全確保支援士試験',
+        date: '2025年12月',
     },
-    { name: "応用情報技術者試験", date: "2024年12月" },
-    { name: "基本情報技術者試験", date: "2024年7月" },
-    { name: "ITパスポート試験", date: "2022年8月" },
+    { name: '応用情報技術者試験', date: '2024年12月' },
+    { name: '基本情報技術者試験', date: '2024年7月' },
+    { name: 'ITパスポート試験', date: '2022年8月' },
 ];
 
 const otherQualifications = [
     {
-        name: "G検定（ジェネラリスト）",
-        date: "2025年8月",
+        name: 'G検定（ジェネラリスト）',
+        date: '2025年8月',
     },
     {
-        name: "SEA/J 情報セキュリティ技術認定 基礎コース（CSBM）",
-        date: "2025年3月",
+        name: 'SEA/J 情報セキュリティ技術認定 基礎コース（CSBM）',
+        date: '2025年3月',
     },
 ];
 ---
@@ -37,7 +37,7 @@ const otherQualifications = [
                 class="border-b border-neutral-300 py-10"
             >
                 <h2 id="national" class="mb-4 text-sm text-neutral-500">
-                    01 / NATIONAL QUALIFICATIONS
+                    NATIONAL QUALIFICATIONS
                 </h2>
                 <ul class="divide-y divide-neutral-200">
                     {nationalQualifications.map((qualification) => (
@@ -58,7 +58,7 @@ const otherQualifications = [
                 class="border-b border-neutral-300 py-10"
             >
                 <h2 id="other" class="mb-4 text-sm text-neutral-500">
-                    02 / OTHER QUALIFICATIONS
+                    OTHER QUALIFICATIONS
                 </h2>
                 <ul class="divide-y divide-neutral-200">
                     {otherQualifications.map((qualification) => (

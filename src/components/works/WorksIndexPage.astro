@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+
+const works = (await getCollection('works', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<Layout title="Works">
+    <div class="mx-auto min-h-[70vh] w-[calc(100%-48px)] max-w-240 py-16 md:py-24">
+        <h1 class="mb-12 text-3xl font-bold">Works</h1>
+        {works.length === 0 ? (
+            <p class="text-sm text-neutral-600">準備中です。</p>
+        ) : (
+            <ul class="divide-y divide-neutral-200">
+                {works.map((work) => (
+                    <li>
+                        <a
+                            href={`/works/${work.id}`}
+                            class="flex flex-col gap-6 py-8 focus-visible:outline-2 focus-visible:outline-offset-4 sm:flex-row sm:gap-8"
+                        >
+                            <Image
+                                src={work.data.image.src}
+                                alt={work.data.image.alt}
+                                width={480}
+                                format="webp"
+                                class="aspect-4/3 w-full shrink-0 border border-neutral-200 bg-neutral-50 object-cover sm:w-64 md:w-80"
+                            />
+                            <div>
+                                <p class="mb-2 text-xs text-neutral-500">
+                                    {work.data.date.toLocaleDateString(
+                                        'ja-JP',
+                                        {
+                                            year: 'numeric',
+                                            month: 'long',
+                                        },
+                                    )}
+                                </p>
+                                <h2 class="mb-3 text-xl font-semibold">
+                                    {work.data.title}
+                                </h2>
+                                <p class="text-sm leading-7 text-neutral-600">
+                                    {work.data.description}
+                                </p>
+                                <p class="mt-4 text-sm text-neutral-500">
+                                    {work.data.technologies.join(' / ')}
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        )}
+    </div>
+</Layout>

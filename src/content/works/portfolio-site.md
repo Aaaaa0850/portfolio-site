@@ -2,7 +2,20 @@
 title: 'ポートフォリオサイト'
 description: 'プロフィールや技術、資格、開発環境をまとめた、ポートフォリオサイトです。'
 date: 2026-11-09
-technologies: ['Astro', 'TypeScript', 'Tailwind CSS', 'React', 'Motion']
+technologies:
+    [
+        'Astro',
+        'TypeScript',
+        'Tailwind CSS',
+        'React',
+        'Motion',
+        'Formspree',
+        'Cloudflare Pages',
+        'Cloudflare Turnstile',
+        'Playwright',
+        'ESLint',
+        'Prettier',
+    ]
 image:
     src: '../../assets/works/Home.webp'
     alt: 'ポートフォリオサイトのトップページのスクリーンショット'
@@ -49,6 +62,17 @@ Tailwind CSSを選定した理由は、スタイルを別のCSSファイルに�
 Motionを選定した理由は、Reactとの相性が良く、アニメーションを簡単に実装できると考えたからです。  
 特に、スキルの検索やフィルタリングを行った際、表示内容が突然切り替わることが気になったため、Motionを利用して滑らかに切り替わるようにしました。
 
+### Formspree
+
+Formspreeを選定した理由は、フォーム送信のためのバックエンドを自分で実装する必要がなく、簡単にお問い合わせフォームを設置できると考えたからです。これにより、開発や運用の手間を減らせるほか、スパム対策などの機能を利用できる点も採用理由の一つです。
+また、Formspreeは無料プランでもフォームの送信数が月に50件まで利用できるため、今回のポートフォリオサイトでは十分であると判断しました。
+
+### Cloudflare Turnstile
+
+Cloudflare Turnstileを選定した理由は、お問い合わせフォームのスパム対策として、ユーザーの認証操作をできるだけ減らし、負担を抑えながらスパム対策ができると考えたからです。  
+また、Formspreeと連携することで、簡単にお問い合わせフォームに組み込むことができるため、Cloudflare Turnstileを採用しました。  
+さらに、Cloudflare Turnstileは無料で利用できるため、コストを抑えられると考えました。
+
 ## UI・UX設計
 
 ### デザイン方針
@@ -64,7 +88,7 @@ Motionを選定した理由は、Reactとの相性が良く、アニメーショ
 特にSkillsページではモバイル端末の閲覧時に、縦リストの状態ではスキルの検索やフィルタリングがしづらくなるため、カルーセル形式にしてスキルを表示するようにしました。
 ![Skillsページのモバイル表示](../../assets/works/skills-mobile.webp)
 
-デスクトップ表示では、スキルや検索がモバイル端末よりしやすいため、スキルの見やすさを優先し、グリッド形式でスキルを表示するようにしました。
+デスクトップ表示では、モバイル端末よりも画面の横幅を広く使えるため、一覧性を優先し、グリッド形式でスキルを表示するようにしました。
 ![Skillsページのデスクトップ表示](../../assets/works/skills-desktop.webp)
 
 ## コンポーネント設計
@@ -77,7 +101,10 @@ HeaderやFooterなどの共通コンポーネントはLayout.astroで呼び出�
 
 今回は、Playwrightを使用して、Skillsページの検索やフィルタリングが正しく動作するかをテストしました。  
 また、ESLintによる静的解析を行い、Prettierを使用してコードのフォーマットを統一することで、コードの品質を保つようにしました。  
+![ローカル上でのESLintとPrettierの実行結果](../../assets/works/eslint-prettier-local.webp)
 さらに、GitHub Actionsを使用して、コードのプッシュ時やプルリクエストの作成時に、PlaywrightによるE2EテストやESLintによる静的解析、Prettierによるフォーマットチェックが自動で実行されるように設定しました。
+![GitHub ActionsのESLintとPrettierの実行結果](../../assets/works/eslint-prettier-actions.webp)
+![GitHub ActionsのPlaywrightの実行結果](../../assets/works/playwright-actions.webp)
 
 ## デプロイ・運用
 
@@ -88,4 +115,7 @@ HeaderやFooterなどの共通コンポーネントはLayout.astroで呼び出�
 ## 開発中の課題と対応
 
 今回、Cloudflare Pagesにサイトを公開する際、ローカル環境とCloudflare側でpnpmのバージョンが異なっており、ビルドに失敗して公開できない問題が発生しました。  
-この問題に対して、Cloudflare Pagesのビルド設定でpnpmのバージョンを指定し、pnpm-workspace.yaml の設定も見直すことで、正常にビルドできるようにしました。
+この問題に対して、Cloudflare Pagesのビルド設定でpnpmのバージョンを指定し、pnpm-workspace.yaml の設定も見直すことで、正常にビルドできるようにしました。  
+また、ContactページではCloudflare Turnstileが正しく動作するかを確認するため、OpenCodeのGLM 5.3 Flashを使用したブラウザ操作によるフォーム送信テストを行いました。  
+その結果、AIエージェントによる操作でもTurnstileが自動承認され、フォームを送信できることが分かりました。また、当初はFormspree側でTurnstileの検証が有効になっていなかったため、設定を見直しました。  
+その後、通常のフォーム送信とメール通知が正常に動作することを確認しました。

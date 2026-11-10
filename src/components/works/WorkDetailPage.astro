@@ -1,0 +1,74 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+interface Props {
+    work: CollectionEntry<'works'>;
+}
+
+const { work } = Astro.props;
+const { Content } = await render(work);
+---
+
+<Layout title={`${work.data.title} | Works`}>
+    <article class="mx-auto w-[calc(100%-48px)] max-w-240 py-16 md:py-24">
+        <a
+            href="/works"
+            class="text-sm text-neutral-600 underline underline-offset-4"
+        >
+            Works
+        </a>
+        <header class="mt-8 mb-12">
+            <p class="mb-3 text-sm text-neutral-500">
+                <time datetime={work.data.date.toISOString()}>
+                    {work.data.date.toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                    })}
+                </time>
+            </p>
+            <h1 class="text-3xl font-bold">{work.data.title}</h1>
+            <p class="mt-5 leading-8 text-neutral-600">
+                {work.data.description}
+            </p>
+            <p class="mt-4 text-sm text-neutral-500">
+                {work.data.technologies.join(' / ')}
+            </p>
+            {work.data.repository && (
+                <div class="mt-6 flex flex-wrap gap-6 text-sm">
+                    <a
+                        href={work.data.repository}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="underline underline-offset-4"
+                    >
+                        GitHub
+                    </a>
+                </div>
+            )}
+        </header>
+        <Image
+            src={work.data.image.src}
+            alt={work.data.image.alt}
+            width={1200}
+            format="webp"
+            class="mb-12 w-full object-cover"
+        />
+        <div class="work-content leading-8 text-neutral-700 [&_a]:underline [&_h2]:mt-12 [&_h2]:mb-5 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-8 [&_h3]:mb-4 [&_h3]:font-semibold [&_li]:my-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-5 [&_pre]:overflow-x-auto [&_pre]:p-4 [&_ul]:list-disc [&_ul]:pl-6">
+            <Content />
+        </div>
+    </article>
+</Layout>
+
+<style>
+    :global(.work-content img) {
+        display: block;
+        width: auto;
+        max-width: min(100%, 800px);
+        height: auto;
+        margin: 24px auto;
+        border-radius: 8px;
+    }
+</style>

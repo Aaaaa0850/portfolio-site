@@ -1,0 +1,84 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const sections = [
+    {
+        id: 'introduction',
+        number: '01',
+        title: 'INTRODUCTION',
+        paragraphs: [
+            '初めまして。すみと申します。現在はWebアプリケーションの個人開発に取り組んでいます。',
+        ],
+    },
+    {
+        id: 'background',
+        number: '02',
+        title: 'BACKGROUND',
+        paragraphs: [
+            '私がプログラミングに興味を持ったきっかけは、小学生の頃にNintendo 3DSの『プチコン3号』に触れたことです。',
+            '当時は自分でプログラムを書くことで、自分の思いのままのゲームを作れることに感動し、プログラミングの楽しさを知りました。',
+            'その後、Node.jsに触れたことをきっかけにWeb開発に興味を持ち、独学を続けています。フロントエンドからバックエンドまで、さまざまな技術に触れるようになりました。',
+            '現在はTypeScriptを中心にWebアプリケーション開発に取り組みながら、モバイルアプリケーション開発、クラウド、セキュリティなども幅広く学んでいます。',
+        ],
+    },
+    {
+        id: 'interests',
+        number: '03',
+        title: 'INTERESTS',
+        paragraphs: [
+            'Webアプリケーション開発を中心に、クラウド、セキュリティ、AIなどの幅広い分野に関心があります。',
+            '特に、個々の技術だけでなく、それらを組み合わせたシステム全体の設計やアーキテクチャに興味を持っています。',
+            'また、新しい開発ツールや技術、アプリケーションに組み込むAIエージェントなどの技術にも関心があり、積極的に学んでいます。',
+        ],
+    },
+    {
+        id: 'philosophy',
+        number: '04',
+        title: 'PHILOSOPHY',
+        paragraphs: [
+            '個人開発では、技術の新しさだけではなく、目的や要件に適した技術やフレームワークを選択することを重視しています。',
+            'また、機能を実現して終わりではなく、パフォーマンスやセキュリティ、保守性などの非機能要件も考慮し、より良いシステムを作ることを心がけています。',
+            'AIによる開発支援も積極的に活用しています。設計や実装における選択肢の検討、コードレビュー、問題解決などの補助として利用し、最終的な判断は自分自身で行うことを重視しています。',
+        ],
+    },
+    {
+        id: 'goals',
+        number: '05',
+        title: 'GOALS',
+        paragraphs: [
+            'Webアプリケーション開発の技術をさらに深めながら、クラウドやセキュリティ、AIなどの幅広い知識も身につけていきたいと考えています。',
+            '将来的には、個々の技術だけでなく、システム全体を俯瞰し、要件に応じた適切なアーキテクチャの設計や技術選定ができるエンジニアを目指しています。',
+            'また、個人開発を通じて、自分のアイデアを形にする力を高め、将来的には自分のサービスやプロダクトを世界に提供できるようなエンジニアになることを目標としています。',
+        ],
+    },
+] as const;
+---
+
+<Layout title="About">
+    <div class="mx-auto min-h-[calc(100vh-149px)] w-[calc(100%-48px)] max-w-240 pt-20 pb-25 max-[600px]:pt-14 max-[600px]:pb-17.5">
+        <header class="mb-12 max-[600px]:mb-8">
+            <h1 class="text-[clamp(32px,5vw,46px)] leading-[1.3] font-bold">
+                About
+            </h1>
+        </header>
+
+        <div class="border-t border-neutral-300">
+            {sections.map((section) => (
+                <section
+                    aria-labelledby={section.id}
+                    class="border-b border-neutral-300 py-10"
+                >
+                    <h2 id={section.id} class="mb-4 text-sm text-neutral-500">
+                        {section.number} / {section.title}
+                    </h2>
+
+                    <div class="text-[15px] leading-loose text-neutral-900">
+                        {section.paragraphs.map((paragraph) => (
+                            <p class="m-0">{paragraph}</p>
+                        ))}
+                    </div>
+                </section>
+            ))}
+        </div>
+    </div>
+</Layout>

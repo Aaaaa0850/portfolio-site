@@ -46,7 +46,7 @@ repository: 'https://github.com/Aaaaa0850/portfolio-site'
 
 ## 技術選定
 
-今回のポートフォリオサイトではAstro、TypeScript、Tailwind CSS、React、Motionなどを主な技術として使用しています。
+今今回のポートフォリオサイトではAstro、TypeScript、Tailwind CSS、React、Motion, Formspree, Cloudflare Pages, Cloudflare Turnstile, Playwright, ESLint, Prettierなどを主な技術として使用しています。
 
 ### Astro
 

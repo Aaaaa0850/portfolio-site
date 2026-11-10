@@ -1,0 +1,218 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT?.trim();
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim();
+const isConfigured = Boolean(endpoint && siteKey);
+---
+
+<Layout title="Contact">
+    <div class="mx-auto min-h-[calc(100vh-149px)] w-[calc(100%-48px)] max-w-240 pt-20 pb-25 max-[600px]:pt-14 max-[600px]:pb-17.5">
+        <header class="mb-12 max-[600px]:mb-8">
+            <h1 class="text-[clamp(32px,5vw,46px)] leading-[1.3] font-bold">
+                Contact
+            </h1>
+        </header>
+
+        <form
+            id="contact-form"
+            action={isConfigured ? endpoint : undefined}
+            method="POST"
+            class="max-w-160 space-y-8"
+            aria-describedby="contact-status"
+        >
+            <fieldset disabled={!isConfigured} class="space-y-8">
+                <div>
+                    <label for="contact-name" class="mb-3 block text-sm">
+                        お名前
+                    </label>
+                    <input
+                        id="contact-name"
+                        name="name"
+                        type="text"
+                        autocomplete="name"
+                        required
+                        maxlength="100"
+                        class="w-full rounded-none border border-neutral-300 bg-white px-4 py-3 text-base shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-700"
+                        placeholder="山田　太郎"
+                    />
+                </div>
+                <div>
+                    <label for="contact-email" class="mb-3 block text-sm">
+                        メールアドレス
+                    </label>
+                    <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        autocomplete="email"
+                        required
+                        maxlength="254"
+                        class="w-full rounded-none border border-neutral-300 bg-white px-4 py-3 text-base shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-700"
+                        placeholder="example@exmaple.com"
+                    />
+                </div>
+                <div>
+                    <label for="contact-message" class="mb-3 block text-sm">
+                        お問い合わせ
+                    </label>
+                    <textarea
+                        id="contact-message"
+                        name="message"
+                        required
+                        rows="8"
+                        maxlength="10000"
+                        class="block w-full resize-y rounded-none border border-neutral-300 bg-white px-4 py-3 text-base leading-8 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-700"
+                        placeholder="お問い合わせ内容をご記入ください。"
+                    ></textarea>
+                </div>
+            </fieldset>
+
+            {isConfigured && (
+                <div id="contact-turnstile" data-sitekey={siteKey}></div>
+            )}
+
+            <p
+                id="contact-status"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                class="text-sm leading-7 text-neutral-600"
+            >
+                {!isConfigured && '現在、お問い合わせの受付を準備しています。'}
+            </p>
+            <button
+                type="submit"
+                disabled
+                class="bg-neutral-900 px-10 py-3 text-sm text-white transition-colors hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-600"
+            >
+                送信する
+            </button>
+            <noscript>
+                <p class="text-sm text-neutral-600">
+                    お問い合わせの送信には JavaScript を有効にしてください。
+                </p>
+            </noscript>
+        </form>
+    </div>
+</Layout>
+
+<script>
+    type TurnstileApi = {
+        render: (
+            container: HTMLElement,
+            options: {
+                sitekey: string;
+                action: string;
+                theme: string;
+                size: string;
+                language: string;
+                callback: (token: string) => void;
+                'expired-callback': () => void;
+                'error-callback': () => void;
+            },
+        ) => string;
+        reset: (widgetId: string) => void;
+    };
+
+    const turnstileWindow = window as Window & { turnstile?: TurnstileApi };
+    const form = document.querySelector<HTMLFormElement>('#contact-form');
+    const container = document.querySelector<HTMLElement>('#contact-turnstile');
+    const status = document.querySelector<HTMLElement>('#contact-status');
+    const button = form?.querySelector<HTMLButtonElement>(
+        'button[type="submit"]',
+    );
+
+    if (form && container && status && button) {
+        let widgetId: string | undefined;
+        let verified = false;
+        let submitting = false;
+
+        const requireVerification = (message: string) => {
+            verified = false;
+            button.disabled = true;
+            status.textContent = message;
+        };
+
+        const renderWidget = () => {
+            if (!turnstileWindow.turnstile || !container.dataset.sitekey)
+                return;
+            widgetId = turnstileWindow.turnstile.render(container, {
+                sitekey: container.dataset.sitekey,
+                action: 'contact',
+                theme: 'light',
+                size: 'flexible',
+                language: 'ja',
+                callback: () => {
+                    verified = true;
+                    button.disabled = submitting;
+                },
+                'expired-callback': () => {
+                    requireVerification(
+                        '認証の有効期限が切れました。再認証してください。',
+                    );
+                    if (widgetId !== undefined) {
+                        turnstileWindow.turnstile?.reset(widgetId);
+                    }
+                },
+                'error-callback': () => {
+                    requireVerification(
+                        '認証に失敗しました。時間をおいて再度お試しください。',
+                    );
+                },
+            });
+        };
+
+        const script = document.createElement('script');
+        script.src =
+            'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        script.addEventListener('load', renderWidget, { once: true });
+        script.addEventListener(
+            'error',
+            () => {
+                requireVerification(
+                    '認証を読み込めませんでした。ページを再読み込みしてください。',
+                );
+            },
+            { once: true },
+        );
+        document.head.appendChild(script);
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (submitting || !verified || !form.reportValidity()) return;
+
+            submitting = true;
+            button.disabled = true;
+            button.textContent = '送信中…';
+            form.setAttribute('aria-busy', 'true');
+            status.textContent = '';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { Accept: 'application/json' },
+                    signal: AbortSignal.timeout(20000),
+                });
+                if (!response.ok) throw new Error('Submission failed');
+                form.reset();
+                status.textContent =
+                    'お問い合わせを送信しました。ありがとうございます。';
+            } catch {
+                status.textContent =
+                    '送信を確認できませんでした。時間をおいて再認証し、お試しください。';
+            } finally {
+                submitting = false;
+                verified = false;
+                button.textContent = '送信する';
+                button.disabled = true;
+                form.removeAttribute('aria-busy');
+                if (widgetId !== undefined) {
+                    turnstileWindow.turnstile?.reset(widgetId);
+                }
+            }
+        });
+    }
+</script>

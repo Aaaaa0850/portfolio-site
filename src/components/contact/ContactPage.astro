@@ -18,7 +18,7 @@ const isConfigured = Boolean(endpoint && siteKey);
             id="contact-form"
             action={isConfigured ? endpoint : undefined}
             method="POST"
-            class="max-w-160 space-y-8"
+            class="mx-auto max-w-160 space-y-8"
             aria-describedby="contact-status"
         >
             <fieldset disabled={!isConfigured} class="space-y-8">
